@@ -41,29 +41,26 @@ public class MiniGestorePrenotazioni {
     }
 
     public boolean prenota(Prenotazione p) {
-        if(Math.max(m,n)>=p.getnPosti()){
-            if (p instanceof PrenotazioneGruppo ) {
+        if (Math.max(m, n) >= p.getnPosti()) {
+            if (p instanceof PrenotazioneGruppo) {
 
-                if((n > p.getnPosti() ) ){
-                    prenotazioniEsterno[prenotazioniEsterno.length-n]=p;
-                    n-= p.getnPosti();
-                }
-                else{
-                    prenotazioniInterno[prenotazioniInterno.length-m]=p;
-                    m-= p.getnPosti();
+                if ((n > p.getnPosti())) {
+                    prenotazioniEsterno[prenotazioniEsterno.length - n] = p;
+                    n -= p.getnPosti();
+                } else {
+                    prenotazioniInterno[prenotazioniInterno.length - m] = p;
+                    m -= p.getnPosti();
                 }
                 return true;
 
-            } else if (p instanceof PrenotazioneSingola ) {
+            } else if (p instanceof PrenotazioneSingola) {
 
-                if (((((PrenotazioneSingola) p).getPref()) == Preferenza.ESTERNO && n>=p.getnPosti())
-                        || (((PrenotazioneSingola) p).getPref()) == Preferenza.INTERNO && m<=p.getnPosti()){
-                    prenotazioniEsterno[prenotazioniEsterno.length-n]=p;
+                if (((((PrenotazioneSingola) p).getPref()) == Preferenza.ESTERNO && n >= p.getnPosti())
+                        || (((PrenotazioneSingola) p).getPref()) == Preferenza.INTERNO && m <= p.getnPosti()) {
+                    prenotazioniEsterno[prenotazioniEsterno.length - n] = p;
                     n--;
-                }
-
-                else {
-                    prenotazioniInterno[prenotazioniInterno.length-m]=p;
+                } else {
+                    prenotazioniInterno[prenotazioniInterno.length - m] = p;
                     m--;
                 }
                 return true;
@@ -74,27 +71,55 @@ public class MiniGestorePrenotazioni {
      alla preferenza indicata), altrimenti viene rifiutata restituendo false*/
 
 
-    private void assegnaPosto(Prenotazione[] prenArr,Prenotazione prenotazione,int x){
-        prenArr[prenArr.length-prenotazione.getnPosti()]=prenotazione;
-        x-= prenotazione.getnPosti();
+    private void assegnaPosto(Prenotazione[] prenArr, Prenotazione prenotazione, int x) {
+        prenArr[prenArr.length - prenotazione.getnPosti()] = prenotazione;
+        x -= prenotazione.getnPosti();
     }
 
     public void terminaPrenotazione(Prenotazione p) {
+
         for (int i = 0; i < prenotazioniInterno.length; i++) {
-            if(prenotazioniInterno[i] != null && prenotazioniInterno[i].getCodPrenotazione().equals(p.getCodPrenotazione())){
-                prenotazioniInterno[i]=null;
-                m+=p.getnPosti();
+            if (prenotazioniInterno[i] != null && prenotazioniInterno[i].getCodPrenotazione().equals(p.getCodPrenotazione())) {
+                prenotazioniInterno[i] = null;
+                m += p.getnPosti();
+                aggiornaPrenotazioni(prenotazioniEsterno, true);
+                break;
             }
         }
         for (int i = 0; i < prenotazioniEsterno.length; i++) {
-            if(prenotazioniEsterno[i] != null && prenotazioniEsterno[i].getCodPrenotazione().equals(p.getCodPrenotazione())){
-                prenotazioniEsterno[i]=null;
-                n+=p.getnPosti();
+            if (prenotazioniEsterno[i] != null && prenotazioniEsterno[i].getCodPrenotazione().equals(p.getCodPrenotazione())) {
+                prenotazioniEsterno[i] = null;
+                n += p.getnPosti();
+                aggiornaPrenotazioni(prenotazioniInterno, false);
                 break;
             }
         }
 
     } //data una Prenotazione p in input, termina la prenotazione eliminandola e liberando i posti associati.
+
+
+    private void aggiornaPrenotazioni(Prenotazione[] prenArr, boolean where) {    //Trovo prenotazioni non soddisfatte
+        if (where) {
+            for (int i = 0; i < prenArr.length; i++) {
+                if (prenArr[i]!=null && ((PrenotazioneSingola) prenArr[i]).getPref().equals(Preferenza.INTERNO)) {
+                    Prenotazione pren = prenArr[i];
+                    terminaPrenotazione(pren);
+                    this.prenota(pren);
+
+                    break;
+                }
+            }
+        } else {
+            for (int i = 0; i < prenArr.length; i++) {
+                if (prenArr[i]!=null &&((PrenotazioneSingola) prenArr[i]).getPref().equals(Preferenza.ESTERNO)) {
+                    Prenotazione pren = prenArr[i];
+                    terminaPrenotazione(pren);
+                    this.prenota(pren);
+                    break;
+                }
+            }
+        }
+    }
 
     public Prenotazione[] prenotazioniAttualiEsterno() {
         return prenotazioniEsterno;
