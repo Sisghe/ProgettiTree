@@ -16,11 +16,15 @@ public class Squadra {
 
 
     public void setGoalFatti(int goalFatti) {
-        this.goalFatti = goalFatti;
+        this.goalFatti += goalFatti;
     }
 
-    public void setGolSubiti(int golSubiti) {
-        this.golSubiti = golSubiti;
+    public void setGoalSubiti(int golSubiti) {
+        this.golSubiti += golSubiti;
+    }
+
+    public void setPunteggio(int punteggio) {
+        this.punteggio += punteggio;
     }
 
     public int getId() {
@@ -35,8 +39,16 @@ public class Squadra {
         return goalFatti;
     }
 
-    public int getGolSubiti() {
+    public int getGoalSubiti() {
         return golSubiti;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    @Override
+    public String toString() {
+        return "Squadra{" + "nome='" + nome +  '}';
+    }
 }

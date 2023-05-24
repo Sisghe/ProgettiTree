@@ -44,6 +44,13 @@ public class TestClassifica {
         }
 
         System.out.println(classifica.toString());
+        System.out.println("Miglior attacco:\t" + classifica.getMigliorAttacco() + " con " + classifica.getMigliorAttacco().getGoalFatti());
+        System.out.println("Peggior difesa: \t" + classifica.getPeggiorDifesa() + " con " + classifica.getPeggiorDifesa().getGoalSubiti());
+
+        System.out.println("\nGoals squadre :");
+        for (int i = 0; i < squadre.length; i++) {
+            System.out.println("Squadra in Casa:\t" +squadre[i].getNome() + "\tGoal Fatti:\t" + squadre[i].getGoalFatti() + "\tGoal Subiti:\t" + squadre[i].getGoalSubiti());
+        }
 
 
 
