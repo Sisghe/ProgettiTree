@@ -1,6 +1,6 @@
 package Classifica;
 
-public class Squadra {
+public class Squadra implements Comparable<Squadra> {
     private int id;
     private String nome;
     private Giocatore[] rosa;
@@ -48,7 +48,16 @@ public class Squadra {
     }
 
     @Override
+    public int compareTo(Squadra s) {
+        int nameComparison = nome.compareTo(s.getNome());
+        int idComparison = Integer.compare(id, s.getId());
+        if (idComparison != 0) {
+            return idComparison;
+        } else return nameComparison;
+    }
+
+    @Override
     public String toString() {
-        return "Squadra{" + "nome='" + nome +  '}';
+        return "Squadra{" + "nome='" + nome + '}';
     }
 }
