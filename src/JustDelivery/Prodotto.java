@@ -16,4 +16,7 @@ public class Prodotto {
     public String getNome() {return nome;}
 
     public double getPrezzo() {return prezzo;}
+
+    @Override
+    public String toString() {return "Prodotto{" + "nome='" + nome + '\'' + ", prezzo=" + prezzo + " € }";}
 }

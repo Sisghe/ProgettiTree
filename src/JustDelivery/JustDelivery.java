@@ -33,10 +33,10 @@ import java.util.List;
  */
 public class JustDelivery {
     //Lista dei ristoranti
-    List<Ristorante> ristoranti = new ArrayList<>();
+    private List<Ristorante> ristoranti = new ArrayList<>();
 
     //Lista degli utenti
-    List<Utente> utenti = new ArrayList<>();
+    private List<Utente> utenti = new ArrayList<>();
 
     /**
      * Registrazione utente nell'app
@@ -67,5 +67,86 @@ public class JustDelivery {
         }
     }
 
+    /**
+     * ricerca all'interno della lista dei ristoranti tutti i ristoranti che contengono la cucina specificata.
+     * @param cucina TipoCucina da ricercare.
+     * @return la lista dei ristoranti con la cucina selezionata.
+     */
+    public List<Ristorante> cercaRistorantiCucina(TipoCucina cucina){
+        List<Ristorante> res = new ArrayList<>();
+        for (Ristorante ristorante : ristoranti) {
+            List<TipoCucina> cucine = ristorante.getTipoCucina();
+            if(cucine.contains(cucina)){
+                res.add(ristorante);
+            }
+        }
+        return res;
+    }
+    /**
+     * Metodo per stampare il menú
+     */
+    public void stampaMenu(Ristorante ristorante) {
+        System.out.println("Menu del ristorante " + ristorante.getNome() + ":");
+        for (Prodotto prodotto : ristorante.getMenu()) {
+            System.out.println(prodotto.toString());
+        }
+        System.out.println();
+    }
 
+    /**
+     *Aggiungere prodotto ad un ordine esistente
+     * @param prodotto : prodotto da aggiungere
+     * @param utente :  utente a cui aggiungere il prodotto all'ordine
+     * @param ristorante :  ristrorante da cui proviene l'ordine
+     */
+    public void addProdotto(Prodotto prodotto, Utente utente, Ristorante ristorante){
+        //Cerca l'utente nella lista
+        //utente.aggiungiOrdine(prodotto, ristorante)
+        ArrayList<Prodotto> prodotti =new ArrayList<>();
+        prodotti.add(prodotto);
+        addProdotto(prodotti,utente,ristorante);
+        }
+
+
+    /**
+     *Aggiungere prodotto ad un ordine esistente
+     * @param prodotti : prodotti da aggiungere
+     * @param utente :  utente a cui aggiungere i prodotti all'ordine
+     * @param ristorante :  ristrorante da cui proviene l'ordine
+     */
+    public void addProdotto(ArrayList<Prodotto> prodotti, Utente utente, Ristorante ristorante){
+        for (Utente ut : utenti) {
+            if (ut.equals(utente)) {
+                ut.aggiungiOrdine(prodotti,ristorante);
+            }
+        }
+
+    }
+
+    /**
+     * Stampa del dettaglio dell'ordine
+     * (lista prodotti, prezzo totale calcolando le spese di consegna)
+     * @param ordine
+     * @return
+     */
+    public void stampaOrdine(Ordine ordine){
+        ordine.toString();
+    }
+
+    /**
+     * Ottenere lo storico degli ordini di un utente
+     * @param utente : utente di cui bisogna conoscere lo storico degli ordini
+     * @return  : storico ordini;
+     */
+    public ArrayList<Ordine> storicoOrdini(Utente utente){
+        return utente.getOrdini();
+    }
+
+    public List<Ristorante> getRistoranti(){
+        return ristoranti;
+    }
+
+    public List<Utente> getUtenti(){
+        return utenti;
+    }
 }
