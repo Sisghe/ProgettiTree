@@ -7,45 +7,49 @@ import java.util.*;
 
 @Getter
 public class Utente {
-    String nome;
+    private String nome;
     @NonNull
-    UUID id;
-    ArrayList<Ordine> ordini;
-    Ordine ordineCorrente;
+    private UUID id;
+    private ArrayList<Ordine> ordini;
+    private Ordine ordineCorrente;
 
-    public Utente(String nome,@NonNull UUID id) {
+
+    public Utente(String nome, @NonNull UUID id) {
         this.nome = nome;
         this.id = id;
-        ordini= new ArrayList<>();
+        ordini = new ArrayList<>();
     }
 
     /**
      * Aggiunge prodotti, se è già presente aggiunge i vari prodotti
+     *
      * @return
      */
-    public void aggiungiOrdine(ArrayList<Prodotto> prodotti,Ristorante ristorante){
-        if(ordineCorrente==null) {
+    public void aggiungiOrdine(ArrayList<Prodotto> prodotti, Ristorante ristorante) {
+        if (ordineCorrente == null) {
             ordineCorrente = new Ordine(prodotti, ristorante);
-        }else{
+        } else {
             try {
-                if(ristorante==ordineCorrente.getRistorante()) {
+                if (ristorante == ordineCorrente.getRistorante()) {
                     ordineCorrente.aggiungiProdotti(prodotti);
-                }else{
+                } else {
                     throw new RistoranteNotEquals();
                 }
-            }catch(RistoranteNotEquals e){
+            } catch (RistoranteNotEquals e) {
                 System.out.println("Ristorante diverso");
+                System.out.println(e);
             }
         }
     }
 
     /**
      * Inserisce l'ordine nello storico ordini e ti restituisce l'ordine completo
+     *
      * @return
      */
-    public Ordine  chiudiOrdine(){
-        Ordine ordineConcluso=new Ordine(ordineCorrente.getProdotti(),ordineCorrente.getRistorante());
-        ordineCorrente=null;
+    public Ordine chiudiOrdine() {
+        Ordine ordineConcluso = new Ordine(ordineCorrente.getProdotti(), ordineCorrente.getRistorante());
+        ordineCorrente = null;
         ordini.add(ordineConcluso);
         return ordineConcluso;
     }
@@ -53,6 +57,7 @@ public class Utente {
 
     /**
      * Restituisce gli ordini di un utente
+     *
      * @return
      */
     public ArrayList<Ordine> getOrdini() {
@@ -62,6 +67,7 @@ public class Utente {
 
     /**
      * Restituisce l'ordine corrente
+     *
      * @return
      */
     public Ordine getOrdineCorrente() {
@@ -70,13 +76,14 @@ public class Utente {
 
     /**
      * Restituisce una lista di ristoranti dove l'utente ha mangiato almeno una volta
+     *
      * @return
      */
-    public ArrayList<Ristorante> getListaRistoranti(){
-        ArrayList<Ristorante> ristoranti=new ArrayList<>();
+    public ArrayList<Ristorante> getListaRistoranti() {
+        ArrayList<Ristorante> ristoranti = new ArrayList<>();
 
-        for(Ordine ordine:ordini){
-            if(!ristoranti.contains(ordine.getRistorante())){
+        for (Ordine ordine : ordini) {
+            if (!ristoranti.contains(ordine.getRistorante())) {
                 ristoranti.add(ordine.getRistorante());
             }
         }
@@ -86,25 +93,26 @@ public class Utente {
 
     /**
      * Restituisce il TipoCucina preferito dall'utente in base a quali ristoranti ha ordinato
+     *
      * @return
      */
-    public TipoCucina getTipoCucinaPreferito(){
-        Map<TipoCucina,Integer> check= new HashMap<>();
-        for(Ordine ordine:ordini){
-            for(TipoCucina tipoCucina:ordine.getRistorante().getTipoCucina()) {
+    public TipoCucina getTipoCucinaPreferito() {
+        Map<TipoCucina, Integer> check = new HashMap<>();
+        for (Ordine ordine : ordini) {
+            for (TipoCucina tipoCucina : ordine.getRistorante().getTipoCucina()) {
                 if (check.get(tipoCucina) == null) {
                     check.put(tipoCucina, 1);
                 } else {
-                    check.put(tipoCucina,(check.get(tipoCucina) + 1));
+                    check.put(tipoCucina, (check.get(tipoCucina) + 1));
                 }
             }
         }
-        int max=0;
-        TipoCucina result=null;
-        for(TipoCucina tipoCucina:check.keySet()){
-            if(check.get(tipoCucina)>max){
-                max=check.get(tipoCucina);
-                result=tipoCucina;
+        int max = 0;
+        TipoCucina result = null;
+        for (TipoCucina tipoCucina : check.keySet()) {
+            if (check.get(tipoCucina) > max) {
+                max = check.get(tipoCucina);
+                result = tipoCucina;
             }
         }
         return result;
@@ -112,37 +120,42 @@ public class Utente {
 
     /**
      * Restituisce in ordine decrescente i ristoranti in cui l'utente ha mangiato più volte
+     *
      * @return
      */
-    public List<Ristorante> getListaRistorantiOrdinati(){
-        ArrayList<Ristorante> ristoranti=new ArrayList<>();
-        Map<Ristorante,Integer> check= new HashMap<>();
+    public List<Ristorante> getListaRistorantiOrdinati() {
+        List<Ristorante> r = getListaRistoranti();
+        Collections.sort(r ,new NumOrdiniComparator(this));
+        return r;
 
-        for(Ordine ordine:ordini){
-            if(check.get(ordine.getRistorante()) == null){
-                check.put(ordine.getRistorante(),1);
-            }else{
-                check.put(ordine.getRistorante(),(check.get(ordine.getRistorante())+1));
+/*        ArrayList<Ristorante> ristoranti = new ArrayList<>();
+        Map<Ristorante, Integer> check = new HashMap<>();
+
+        for (Ordine ordine : ordini) {
+            if (check.get(ordine.getRistorante()) == null) {
+                check.put(ordine.getRistorante(), 1);
+            } else {
+                check.put(ordine.getRistorante(), (check.get(ordine.getRistorante()) + 1));
             }
         }
         int max;
-        Ristorante ristorantemax=null;
+        Ristorante ristorantemax = null;
 
         do {
-            max=0;
+            max = 0;
             for (Ristorante ristorante : check.keySet()) {
-                if(check.get(ristorante)>max){
-                    max=check.get(ristorante);
-                    ristorantemax=ristorante;
+                if (check.get(ristorante) > max) {
+                    max = check.get(ristorante);
+                    ristorantemax = ristorante;
                 }
             }
-            if(max!=0){
+            if (max != 0) {
                 ristoranti.add(ristorantemax);
                 check.remove(ristorantemax);
             }
-        }while (max!=0);
+        } while (max != 0);
 
-        return ristoranti;
+        return ristoranti;*/
 
     }
 

@@ -8,22 +8,23 @@ public class Ordine {
     private ArrayList<Prodotto> prodotti;
     private double prezzoTot = 0;
 
-    public Ordine(ArrayList<Prodotto> prodotti ,Ristorante ristorante ) {
+    public Ordine(ArrayList<Prodotto> prodotti, Ristorante ristorante) {
         this.prodotti = prodotti;
         this.ristorante = ristorante;
         calcolaPrezzo();
     }
 
-    public void calcolaPrezzo(){
-        double sum=0;
-        for(Prodotto p : prodotti){
-            sum+=p.getPrezzo();
+    public void calcolaPrezzo() {
+        double sum = 0;
+        for (Prodotto p : prodotti) {
+            sum += p.getPrezzo();
         }
 //        double sommaPrezzi = 0.0;
 //        prodotti.stream().mapToDouble(Prodotto::getPrezzo).forEach(p -> sommaPrezzi += p);
-        this.prezzoTot=sum + getRistorante().getSpesaSpedizione();
+        this.prezzoTot = sum + getRistorante().getSpesaSpedizione();
 
     }
+
     public void aggiungiProdotti(List<Prodotto> prodotti) {
         this.prodotti.addAll(prodotti);
         calcolaPrezzo();
@@ -34,12 +35,14 @@ public class Ordine {
         calcolaPrezzo();
     }
 
-    public ArrayList<Prodotto> getProdotti(){
+    public ArrayList<Prodotto> getProdotti() {
         return prodotti;
     }
-    public Ristorante getRistorante(){
+
+    public Ristorante getRistorante() {
         return ristorante;
     }
+
     public double getPrezzoTot() {
         return prezzoTot;
     }

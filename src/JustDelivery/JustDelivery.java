@@ -1,5 +1,7 @@
 package JustDelivery;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ import java.util.List;
  * * Dato un utente **u**, utilizzando la cucina più apprezzata dall'utente **u**, scegliere un ristorante che ha quel tipo di
  * cucina e dal quale l'utente **u** non ha mai ordinato
  */
+@Getter
 public class JustDelivery {
     //Lista dei ristoranti
     private List<Ristorante> ristoranti = new ArrayList<>();
@@ -40,28 +43,31 @@ public class JustDelivery {
 
     /**
      * Registrazione utente nell'app
+     *
      * @param utente utente da registrare
      */
-    public void registrazioneUtente(Utente utente){
+    public void registrazioneUtente(Utente utente) {
         utenti.add(utente);
     }
 
     /**
      * Registrazione ristorante nell'app
+     *
      * @param ristorante ristorante da registrare
      */
-    public void registrazioneRistorante(Ristorante ristorante){
+    public void registrazioneRistorante(Ristorante ristorante) {
         ristoranti.add(ristorante);
     }
 
     /**
      * Setta il menu di un ristorante
+     *
      * @param ristorante ristorante specificato
-     * @param prods prodotti da aggiungere al menu del ristorante
+     * @param prods      prodotti da aggiungere al menu del ristorante
      */
-    public void setMenu(Ristorante ristorante, List<Prodotto> prods){
+    public void setMenu(Ristorante ristorante, List<Prodotto> prods) {
         for (Ristorante rist : ristoranti) {
-            if(rist.equals(ristorante)){
+            if (rist.equals(ristorante)) {
                 rist.setMenu(prods);
             }
         }
@@ -69,19 +75,21 @@ public class JustDelivery {
 
     /**
      * ricerca all'interno della lista dei ristoranti tutti i ristoranti che contengono la cucina specificata.
+     *
      * @param cucina TipoCucina da ricercare.
      * @return la lista dei ristoranti con la cucina selezionata.
      */
-    public List<Ristorante> cercaRistorantiCucina(TipoCucina cucina){
+    public List<Ristorante> cercaRistorantiCucina(TipoCucina cucina) {
         List<Ristorante> res = new ArrayList<>();
         for (Ristorante ristorante : ristoranti) {
             List<TipoCucina> cucine = ristorante.getTipoCucina();
-            if(cucine.contains(cucina)){
+            if (cucine.contains(cucina)) {
                 res.add(ristorante);
             }
         }
         return res;
     }
+
     /**
      * Metodo per stampare il menú
      */
@@ -94,30 +102,32 @@ public class JustDelivery {
     }
 
     /**
-     *Aggiungere prodotto ad un ordine esistente
-     * @param prodotto : prodotto da aggiungere
-     * @param utente :  utente a cui aggiungere il prodotto all'ordine
+     * Aggiungere prodotto ad un ordine esistente
+     *
+     * @param prodotto   : prodotto da aggiungere
+     * @param utente     :  utente a cui aggiungere il prodotto all'ordine
      * @param ristorante :  ristrorante da cui proviene l'ordine
      */
-    public void addProdotto(Prodotto prodotto, Utente utente, Ristorante ristorante){
+    public void addProdotto(Prodotto prodotto, Utente utente, Ristorante ristorante) {
         //Cerca l'utente nella lista
         //utente.aggiungiOrdine(prodotto, ristorante)
-        ArrayList<Prodotto> prodotti =new ArrayList<>();
+        ArrayList<Prodotto> prodotti = new ArrayList<>();
         prodotti.add(prodotto);
-        addProdotto(prodotti,utente,ristorante);
-        }
+        addProdotto(prodotti, utente, ristorante);
+    }
 
 
     /**
-     *Aggiungere prodotto ad un ordine esistente
-     * @param prodotti : prodotti da aggiungere
-     * @param utente :  utente a cui aggiungere i prodotti all'ordine
+     * Aggiungere prodotto ad un ordine esistente
+     *
+     * @param prodotti   : prodotti da aggiungere
+     * @param utente     :  utente a cui aggiungere i prodotti all'ordine
      * @param ristorante :  ristrorante da cui proviene l'ordine
      */
-    public void addProdotto(ArrayList<Prodotto> prodotti, Utente utente, Ristorante ristorante){
+    public void addProdotto(ArrayList<Prodotto> prodotti, Utente utente, Ristorante ristorante) {
         for (Utente ut : utenti) {
             if (ut.equals(utente)) {
-                ut.aggiungiOrdine(prodotti,ristorante);
+                ut.aggiungiOrdine(prodotti, ristorante);
             }
         }
 
@@ -126,30 +136,46 @@ public class JustDelivery {
     /**
      * Stampa del dettaglio dell'ordine
      * (lista prodotti, prezzo totale calcolando le spese di consegna)
+     *
      * @param ordine
      * @return
      */
-    public void stampaOrdine(Ordine ordine){
+    public void stampaOrdine(Ordine ordine) {
         ordine.toString();
     }
 
     /**
      * Ottenere lo storico degli ordini di un utente
+     *
      * @param utente : utente di cui bisogna conoscere lo storico degli ordini
-     * @return  : storico ordini;
+     * @return : storico ordini;
      */
-    public ArrayList<Ordine> storicoOrdini(Utente utente){
+    public ArrayList<Ordine> getStoricoOrdini(Utente utente) {
         return utente.getOrdini();
     }
 
-    public List<Ristorante> getRistoranti(){
-        return ristoranti;
+    public List<Ristorante> getRistorantiFromOrdini(Utente u) {
+        return u.getListaRistorantiOrdinati();
     }
 
-    public List<Utente> getUtenti(){
-        return utenti;
-    }
-    public List<Ristorante> getRistorantiFromOrdini({
+    public TipoCucina getCucinaPreferita(Utente u) {
+        return u.getTipoCucinaPreferito();
     }
 
+
+    public Ristorante getRistoranteMaiOrdinato(Utente utente){
+        TipoCucina tipoCucina = utente.getTipoCucinaPreferito();
+        List<Ristorante> ristorantiUtente = utente.getListaRistoranti();
+
+        for (Ristorante ristorante : ristoranti) {
+            if (ristorante.getTipoCucina().contains(tipoCucina) && !ristorantiUtente.contains(ristorante)){
+                return ristorante;
+            }
+        }
+        return null;
+    }
+
+    public void chiudiOrdine(Utente utente1) {
+        utente1.chiudiOrdine();
+    }
 }

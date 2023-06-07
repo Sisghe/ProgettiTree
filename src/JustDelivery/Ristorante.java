@@ -1,10 +1,7 @@
 package JustDelivery;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
+import java.util.*;
+//Ottenere i ristoranti dai quali un utente ha effettuato un ordine, ordinati per quantità di ordini effettuati dall'utente
 public class Ristorante {
     private String nome;
     private UUID id;
@@ -12,8 +9,8 @@ public class Ristorante {
     private List<TipoCucina> tipoCucina = new ArrayList();
     private double spesaSpedizione;
 
-    public Ristorante(String nome,UUID id, List<TipoCucina> tipoCucina, double spesaSpedizione) {
-        this.nome=nome;
+    public Ristorante(String nome, UUID id, List<TipoCucina> tipoCucina, double spesaSpedizione) {
+        this.nome = nome;
         this.id = id;
         this.tipoCucina = tipoCucina;
         this.spesaSpedizione = spesaSpedizione;
@@ -39,7 +36,7 @@ public class Ristorante {
         this.menu = menu;
     }
 
-    public double getSpesaSpedizione(){
+    public double getSpesaSpedizione() {
         return spesaSpedizione;
     }
 
