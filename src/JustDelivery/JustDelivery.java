@@ -149,4 +149,7 @@ public class JustDelivery {
     public List<Utente> getUtenti(){
         return utenti;
     }
+    public List<Ristorante> getRistorantiFromOrdini({
+    }
+
 }

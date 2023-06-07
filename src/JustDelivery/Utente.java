@@ -20,7 +20,7 @@ public class Utente {
     }
 
     /**
-     * Aggiunge un ordine, se è già presente aggiunge i vari prodotti
+     * Aggiunge prodotti, se è già presente aggiunge i vari prodotti
      * @return
      */
     public void aggiungiOrdine(ArrayList<Prodotto> prodotti,Ristorante ristorante){
